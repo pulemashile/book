@@ -1,0 +1,25 @@
+{
+  "books": [
+    {
+      "title": "Book 1",
+      "author": "Author 1",
+      "publisher": "Publisher 1",
+      "publishedDate": "2020-01-01",
+      "isbn": "1234567890"
+    },
+    {
+      "title": "Book 2",
+      "author": "Author 2",
+      "publisher": "Publisher 2",
+      "publishedDate": "2020-02-01",
+      "isbn": "2345678901"
+    },
+    {
+      "title": "Book 3",
+      "author": "Author 3",
+      "publisher": "Publisher 3",
+      "publishedDate": "2020-03-01",
+      "isbn": "3456789012"
+    }
+  ]
+}
