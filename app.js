@@ -1,9 +1,9 @@
 const express = require('express');
 const app = express();
-const port = 3002;
+const port = 3010;
 
 // Middleware to parse JSON data
-app.use(express.json());
+app.use(express.json());//expecting a json data
 
 // Dummy book data
 let books = [
@@ -21,7 +21,7 @@ app.get('/books', (req, res) => {
 app.get('/books/:isbn', (req, res) => {
   const book = books.find(b => b.isbn === req.params.isbn);const express = require('express');
   const app = express();
-  const port = 3000;
+  const port = 3009;
   const fs = require('fs');
   const dbFile = 'db.json';
   
@@ -45,6 +45,7 @@ app.get('/books/:isbn', (req, res) => {
   
   // GET a book by ISBN
   app.get('/books/:isbn', (req, res) => {
+    //extracts the value of the isbn parameter from the URL request parameters.
     const isbn = req.params.isbn;
     const book = data.books.find((book) => book.isbn === isbn);
     if (!book) {
@@ -62,7 +63,7 @@ app.get('/books/:isbn', (req, res) => {
       if (err) {
         console.error(err);
       } else {
-        res.status(201).json(newBook);
+        res.status(201).json(newBook);//new book 
       }
     });
   });
@@ -71,6 +72,20 @@ app.get('/books/:isbn', (req, res) => {
   app.put('/books/:isbn', (req, res) => {
     const isbn = req.params.isbn;
     const updatedBook = req.body;
+  
+    // Validate request body
+    if (!updatedBook || !updatedBook.isbn) {
+      res.status(400).json({ error: 'Invalid request body' });
+      return;
+    }
+  
+    // Check for duplicate ISBNs
+    const existingBook = data.books.find((book) => book.isbn === updatedBook.isbn);
+    if (existingBook) {
+      res.status(409).json({ error: 'Book with this ISBN already exists' });
+      return;
+    }
+  
     const bookIndex = data.books.findIndex((book) => book.isbn === isbn);
     if (bookIndex === -1) {
       res.status(404).json({ error: 'Book not found' });
@@ -79,6 +94,7 @@ app.get('/books/:isbn', (req, res) => {
       fs.writeFile(dbFile, JSON.stringify(data, null, 2), (err) => {
         if (err) {
           console.error(err);
+          res.status(500).json({ error: 'Failed to update book' });
         } else {
           res.json(updatedBook);
         }
@@ -153,7 +169,7 @@ app.delete('/books/:isbn', (req, res) => {
   }
 
   books.splice(bookIndex, 1);
-  res.status(204).end();
+  res.status(204).end('deleted');
 });
 
 // Start the server
